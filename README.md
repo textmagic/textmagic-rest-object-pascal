@@ -68,3 +68,17 @@ var MR:TTMMessageResult;
 MR:=TMC.CreateMessage('My SMS message',null,null,null,MY_LIST_ID,null,null,null,null,null,null);
 MR.free;
 ```
+
+# Keywords
+
+delphi sms api
+delphi sms rest api
+send text message from delphi
+delphi sms http api
+send sms message with delphi
+send sms with delphi
+send sms via delphi
+sms gateway in delphi
+send text message delphi
+send sms message using delphi
+send sms message through delphi
