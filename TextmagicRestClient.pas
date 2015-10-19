@@ -15,6 +15,7 @@ uses
   System.SysUtils,
   Variants,
   Classes,
+  RTTI,
   System.Generics.Collections,
   XSuperObject,
   IdGlobalProtocols,
@@ -28,6 +29,12 @@ uses
   DateUtils;
 
 type
+
+TTMBaseClass = class
+  public
+    destructor Destroy;override;
+end;
+
 /// <summary>
 ///   User statement model
 /// </summary>
@@ -53,7 +60,7 @@ end;
 /// <summary>
 ///   User statement model list
 /// </summary>
-TTMStatementList = class
+TTMStatementList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -64,10 +71,30 @@ TTMStatementList = class
   Resources : TObjectList<TTMStatement>;
 end;
 
+TTMMessagingStatsGrouping=(gr_off, gr_day, gr_month, gr_year);
+
+TTMMessagingStatistics = class
+  replyRate : Real;
+  date : TDateTime;
+  deliveryRate : Real;
+  costs: Real;
+  messagesReceived : Integer;
+  messagesSentDelivered : Integer;
+  messagesSentAccepted : Integer;
+  messagesSentBuffered : Integer;
+  messagesSentRejected : Integer;
+  messagesSentParts : Integer;
+end;
+
+TTMMessagingStatisticsList = class(TTMBaseClass)
+  [ALIAS('resources')]
+  Resources : TObjectList<TTMMessagingStatistics>;
+end;
+
 /// <summary>
 ///   Timezone model
 /// </summary>
-TTMTimezone = class
+TTMTimezone = record{!!class}
   [ALIAS('id')]
   Id : Integer;
   [ALIAS('area')]
@@ -83,7 +110,7 @@ end;
 /// <summary>
 ///   Currency model
 /// </summary>
-TTMCurrency = class
+TTMCurrency = record{!!class}
   [ALIAS('id')]
   Id : String;
   [ALIAS('htmlSymbol')]
@@ -119,7 +146,7 @@ end;
 /// <summary>
 ///   User model list
 /// </summary>
-TTMUserList = class
+TTMUserList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -142,12 +169,13 @@ TTMSenderId = class
   User : TTMUser;
   [ALIAS('status')]
   Status : String;
+  destructor Destroy;override;
 end;
 
 /// <summary>
 ///   Sender ID model list
 /// </summary>
-TTMSenderIdList = class
+TTMSenderIdList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -161,7 +189,7 @@ end;
 /// <summary>
 ///   Country model
 /// </summary>
-TTMCountry = class
+TTMCountry = record {!! check if this works }
   [ALIAS('id')]
   Id : String;
   [ALIAS('name')]
@@ -191,7 +219,7 @@ end;
 /// <summary>
 ///   User dedicated number model list
 /// </summary>
-TTMNumberList = class
+TTMNumberList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -212,7 +240,7 @@ TTMAvailableNumberList = class
   Price : Real;
   public
     constructor Create;
-    destructor Destroy;
+    destructor Destroy;override;
 end;
 
 /// <summary>
@@ -227,7 +255,7 @@ TTMSources = class
   SenderIds : TStringList;
   public
     constructor Create;
-    destructor Destroy;
+    destructor Destroy;override;
 end;
 
 /// <summary>
@@ -249,7 +277,7 @@ end;
 /// <summary>
 ///   Invoice model list
 /// </summary>
-TTMInvoiceList = class
+TTMInvoiceList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -279,7 +307,7 @@ end;
 /// <summary>
 ///   Reply model list
 /// </summary>
-TTMReplyList = class
+TTMReplyList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -313,7 +341,7 @@ end;
 /// <summary>
 ///   Message session model list
 /// </summary>
-TTMSessionList = class
+TTMSessionList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -335,12 +363,13 @@ TTMSchedule = class
   Session : TTMSession;
   [ALIAS('rrule')]
   Rrule : String;
+  destructor Destroy;override;
 end;
 
 /// <summary>
 ///   Schedule message model list
 /// </summary>
-TTMScheduleList = class
+TTMScheduleList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -368,12 +397,13 @@ TTMBulkSession = class
   Session : TTMSession;
   [ALIAS('text')]
   Text : String;
+  destructor Destroy;override;
 end;
 
 /// <summary>
 ///   Bulk message session model list
 /// </summary>
-TTMBulkSessionList = class
+TTMBulkSessionList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -417,7 +447,7 @@ end;
 /// <summary>
 ///   Message model list
 /// </summary>
-TTMMessageList = class
+TTMMessageList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -455,7 +485,7 @@ end;
 /// <summary>
 ///   Chat message model list
 /// </summary>
-TTMChatMessageList = class
+TTMChatMessageList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -485,7 +515,7 @@ end;
 /// <summary>
 ///   List model list
 /// </summary>
-TTMListList = class
+TTMListList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -513,7 +543,7 @@ end;
 /// <summary>
 ///   Template model list
 /// </summary>
-TTMTemplateList = class
+TTMTemplateList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -539,7 +569,7 @@ end;
 /// <summary>
 ///   Custom filed model list
 /// </summary>
-TTMCustomFieldList = class
+TTMCustomFieldList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -553,7 +583,7 @@ end;
 /// <summary>
 ///   Contact model
 /// </summary>
-TTMContact = class
+TTMContact = class(TTMBaseClass)
   [ALIAS('id')]
   Id : Integer;
   [ALIAS('firstName')]
@@ -572,10 +602,11 @@ TTMContact = class
   CustomFields : TObjectList<TTMCustomField>;
 end;
 
+
 /// <summary>
 ///   Contact model list
 /// </summary>
-TTMContactList = class
+TTMContactList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -593,19 +624,20 @@ TTMChat = class
   [ALIAS('id')]
   Id : Integer;
   [ALIAS('phone')]
-  Phone : Integer;
+  Phone : String;{!! integer}
   [ALIAS('contact')]
   Contact : TTMContact;
   [ALIAS('unread')]
   Unread : Integer;
   [ALIAS('updatedAt')]
   UpdatedAt : TDateTime;
+  destructor Destroy;override;
 end;
 
 /// <summary>
 ///   Chat model list
 /// </summary>
-TTMChatList = class
+TTMChatList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -635,7 +667,7 @@ end;
 /// <summary>
 ///   Unsubscribed contact model list
 /// </summary>
-TTMUnsubscribedContactList = class
+TTMUnsubscribedContactList = class(TTMBaseClass)
   [ALIAS('page')]
   Page : Integer;
   [ALIAS('limit')]
@@ -722,13 +754,14 @@ end;
 /// <summary>
 ///   Textmagic client
 /// </summary>
-TTMClient = class(TObject)
+TTMClient = class
   private
     FUsername : String;
     FToken : String;
     FBaseUrl : String;
     FUserAgent : String;
     FHeaders: TStringList;
+    FLastJSONResponse : String;
     FSslHandler : TIdSSLIOHandlerSocketOpenSSL;
     LastExecuted : TDateTime;
 
@@ -744,7 +777,7 @@ TTMClient = class(TObject)
   public
     constructor Create(aUsername : String; aToken : String; aUserAgent : String); overload;
     constructor Create(aUsername : String; aToken : String); overload;
-    destructor Destroy;
+    destructor Destroy;override;
 
     function GetContact(aId : Variant) : TTMContact;
     function GetContacts(aPage, aLimit, aShared : Variant) : TTMContactList; overload;
@@ -756,19 +789,22 @@ TTMClient = class(TObject)
     function UpdateContact(aContact : TTMContact; aListIds : Variant) : TTMLinkResult;
     function DeleteContact(aId : Variant) : Boolean; overload;
     function DeleteContact(aContact : TTMContact) : Boolean; overload;
+
     function GetUnsubscribedContacts(aPage, aLimit : Variant) : TTMUnsubscribedContactList; overload;
     function GetUnsubscribedContacts(aPage : Variant) : TTMUnsubscribedContactList; overload;
     function GetUnsubscribedContact(aId : Variant) : TTMUnsubscribedContact;
     function UnsubscribeContact(aPhone : Variant) : TTMLinkResult; overload;
     function UnsubscribeContact(aContact : TTMContact) : TTMLinkResult; overload;
+
     function GetCustomField(aId : Variant) : TTMCustomField;
     function GetCustomFields(aPage, aLimit : Variant) : TTMCustomFieldList; overload;
     function GetCustomFields(aPage : Variant) : TTMCustomFieldList; overload;
     function CreateCustomField(aName : Variant) : TTMLinkResult;
     function UpdateCustomField(aCustomField : TTMCustomField) : TTMLinkResult;
-    function SetCustomFieldValue(aId, aContactId, aValue : Variant) : TTMContact;
+    function SetCustomFieldValue(aId, aContactId, aValue : Variant) : TTMLinkResult;{!!TTMContact;}
     function DeleteCustomField(aId : Variant) : Boolean; overload;
     function DeleteCustomField(aCustomField : TTMCustomField) : Boolean; overload;
+
     function GetTemplate(aId : Variant) : TTMTemplate;
     function GetTemplates(aPage, aLimit : Variant) : TTMTemplateList; overload;
     function GetTemplates(aPage : Variant) : TTMTemplateList; overload;
@@ -777,6 +813,7 @@ TTMClient = class(TObject)
     function UpdateTemplate(aTemplate : TTMTemplate) : TTMLinkResult;
     function DeleteTemplate(aId : Variant) : Boolean; overload;
     function DeleteTemplate(aTemplate : TTMTemplate) : Boolean; overload;
+
     function GetList(aId : Variant) : TTMList;
     function GetLists(aPage, aLimit : Variant) : TTMListList; overload;
     function GetLists(aPage : Variant) : TTMListList; overload;
@@ -794,6 +831,7 @@ TTMClient = class(TObject)
     function AddContactsToList(aId, aContacts : Variant) : TTMLinkResult; overload;
     function DeleteContactsFromList(aList : TTMList; aContacts : TObjectList<TTMContact>) : Boolean; overload;
     function DeleteContactsFromList(aId, aContacts : Variant) : Boolean; overload;
+
     function GetMessage(aId : Variant) : TTMMessage;
     function GetMessages(aPage, aLimit : Variant) : TTMMessageList; overload;
     function GetMessages(aPage : Variant) : TTMMessageList; overload;
@@ -802,13 +840,16 @@ TTMClient = class(TObject)
     function GetPrice(aText, aTemplateId, aSendingTime, aContactIds, aListIds, aPhones, aCutExtra, aPartsCount, aReferenceId, aFrom, aRrule : Variant) : TTMMessagePriceResult;
     function DeleteMessage(aId : Variant) : Boolean; overload;
     function DeleteMessage(aMessage : TTMMessage) : Boolean; overload;
+
     function GetChats(aPage, aLimit : Variant) : TTMChatList; overload;
     function GetChats(aPage : Variant) : TTMChatList; overload;
     function GetChatMessages(aPhone, aPage, aLimit : Variant) : TTMChatMessageList; overload;
     function GetChatMessages(aPhone, aPage : Variant) : TTMChatMessageList; overload;
+
     function GetBulkSession(aId : Variant) : TTMBulkSession;
     function GetBulkSessions(aPage, aLimit : Variant) : TTMBulkSessionList; overload;
     function GetBulkSessions(aPage : Variant) : TTMBulkSessionList; overload;
+
     function GetSession(aId : Variant) : TTMSession;
     function GetSessions(aPage, aLimit : Variant) : TTMSessionList; overload;
     function GetSessions(aPage : Variant) : TTMSessionList; overload;
@@ -816,21 +857,25 @@ TTMClient = class(TObject)
     function GetSessionMessages(aId, aPage : Variant) : TTMMessageList; overload;
     function DeleteSession(aId : Variant) : Boolean; overload;
     function DeleteSession(aSession : TTMSession) : Boolean; overload;
+
     function GetSchedule(aId : Variant) : TTMSchedule;
     function GetSchedules(aPage, aLimit : Variant) : TTMScheduleList; overload;
     function GetSchedules(aPage : Variant) : TTMScheduleList; overload;
     function DeleteSchedule(aId : Variant) : Boolean; overload;
     function DeleteSchedule(aSchedule : TTMSchedule) : Boolean; overload;
+
     function GetReply(aId : Variant) : TTMReply;
     function GetReplies(aPage, aLimit : Variant) : TTMReplyList; overload;
     function GetReplies(aPage : Variant) : TTMReplyList; overload;
     function SearchReplies(aPage, aLimit, aIds, aQuery : Variant) : TTMReplyList;
     function DeleteReply(aId : Variant) : Boolean; overload;
     function DeleteReply(aReply : TTMReply) : Boolean; overload;
+
     function GetInvoices(aPage, aLimit : Variant) : TTMInvoiceList; overload;
     function GetInvoices(aPage : Variant) : TTMInvoiceList; overload;
     function GetSources(aCountry : Variant) : TTMSources; overload;
     function GetSources() : TTMSources; overload;
+
     function GetNumber(aId : Variant) : TTMNumber;
     function GetNumbers(aPage, aLimit : Variant) : TTMNumberList; overload;
     function GetNumbers(aPage : Variant) : TTMNumberList; overload;
@@ -839,23 +884,32 @@ TTMClient = class(TObject)
     function BuyNumber(aPhone, aCountry, aUserId : Variant) : TTMLinkResult;
     function DeleteNumber(aId : Variant) : Boolean; overload;
     function DeleteNumber(aNumber : TTMNumber) : Boolean; overload;
+
     function GetSenderId(aId : Variant) : TTMSenderId;
     function GetSenderIds(aPage, aLimit : Variant) : TTMSenderIdList; overload;
     function GetSenderIds(aPage : Variant) : TTMSenderIdList; overload;
     function CreateSenderId(aSenderId, aExplanation : Variant) : TTMLinkResult;
     function DeleteSenderId(aId : Variant) : Boolean; overload;
     function DeleteSenderId(aSenderId : TTMSenderId) : Boolean; overload;
+
     function GetSubaccount(aId : Variant) : TTMUser;
     function GetSubaccounts(aPage, aLimit : Variant) : TTMUserList; overload;
     function GetSubaccounts(aPage : Variant) : TTMUserList; overload;
     function InviteSubaccount(aEmail, aRole : Variant) : Boolean;
     function CloseSubaccount(aId : Variant) : Boolean; overload;
     function CloseSubaccount(aSubaccount : TTMUser) : Boolean; overload;
+
     function GetStatements(aPage, aLimit : Variant) : TTMStatementList; overload;
     function GetStatements(aPage : Variant) : TTMStatementList; overload;
+    function GetMessagingStats(aBy: TTMMessagingStatsGrouping; aStart, aEnd : Variant) : TTMMessagingStatisticsList;
+
     function GetUser() : TTMUser;
     function UpdateUser(aFirstName, aLastName, aCompany : Variant) : TTMLinkResult; overload;
     function UpdateUser(aUser : TTMUser) : TTMLinkResult; overload;
+
+    function Ping: Boolean;
+
+    property LastJSONResponse : String read FLastJSONResponse;
 end;
 
 const
@@ -865,6 +919,57 @@ const
   DEFAULT_USER_AGENT = 'textmagic-rest-object-pascal/2.00';
 
 implementation
+
+destructor TTMBaseClass.destroy;
+var C:TRttiContext;
+    T:TRttiType;
+    F:TRttiField;
+    O:TObject;
+begin
+  { In keeping with RTTI mechanics, disposes of the Resources/CustomFields ObjectList in any derived class that implements is }
+  C:=TRttiContext.Create;
+  T:=C.GetType(Self.ClassType);
+  F:=T.GetField('Resources');
+  if not(Assigned(F)) then F:=T.GetField('CustomFields');
+  if Assigned(F) then
+  begin
+       O:=F.GetValue(self).AsObject;
+       if Assigned(O) then O.Free;
+  end;
+  C.Free;
+  inherited Destroy;
+end;
+
+destructor TTMSchedule.Destroy;
+begin
+  Session.Free;
+  inherited Destroy;
+end;
+
+destructor TTMBulkSession.Destroy;
+begin
+  Session.Free;
+  inherited Destroy;
+end;
+
+destructor TTMChat.Destroy;
+begin
+  Contact.Free;
+  inherited Destroy;
+end;
+
+destructor TTMSenderId.Destroy;
+begin
+  User.Free;
+  inherited Destroy;
+end;
+{}
+function Bool_VarToStr(const V: Variant): string;
+{ Helper for some varstr operations; API doesn't want 'true' or 'false' }
+begin
+  if V then Result:='1' else Result:='0';
+end;
+
 
 /// <summary>
 ///   Available number list constructor
@@ -1180,6 +1285,7 @@ begin
     end;
     Result.Code := httpClient.ResponseCode;
     Result.Body := Response;
+    FLastJSONResponse := Response;
   except
     on E: EIdHTTPProtocolException do
     begin
@@ -1219,6 +1325,7 @@ begin
     end;
     Result.Code := httpClient.ResponseCode;
     Result.Body := Response;
+    FLastJSONResponse := Response;
   except
     on E: EIdHTTPProtocolException do
     begin
@@ -1253,6 +1360,7 @@ begin
     Response := HttpClient.Get(aPath + '?' + Params);
     Result.Code := HttpClient.ResponseCode;
     Result.Body := Response;
+    FLastJSONResponse := Response;
   except
     on E: EIdHTTPProtocolException do
     begin
@@ -1285,6 +1393,7 @@ begin
     Params := createStringStreamParams(aParams);
     HttpClient.Request.ContentType := 'application/x-www-form-urlencoded';
     CheckExecutionTime();
+
     try
       Response := HttpClient.Put(aPath, Params);
     finally
@@ -1293,6 +1402,7 @@ begin
 
     Result.Code := httpClient.ResponseCode;
     Result.Body := Response;
+    FLastJSONResponse := Response;
   except
     on E: EIdHTTPProtocolException do
     begin
@@ -1345,8 +1455,10 @@ begin
     Params.Add('page=' + VarToStr(aPage));
   if not VarIsNull(aLimit) then
     Params.Add('limit=' + VarToStr(aLimit));
+
   if not VarIsNull(aShared) then
-    Params.Add('shared=' + VarToStr(aShared));
+    Params.Add('shared=' + Bool_VarToStr(aShared));
+
   try
     ContactList := TTMContactList.FromJSON(RetrieveData(Self.FBaseUrl + 'contacts', Params).Body);
   finally
@@ -1422,7 +1534,7 @@ begin
   if not VarIsNull(aLimit) then
     Params.Add('limit=' + VarToStr(aLimit));
   if not VarIsNull(aShared) then
-    Params.Add('shared=' + VarToStr(aShared));
+    Params.Add('shared=' + Bool_VarToStr(aShared));
   if not VarIsNull(aIds) then
     Params.Add('ids=' + VarToStr(aIds));
   if not VarIsNull(aListIds) then
@@ -1430,7 +1542,7 @@ begin
   if not VarIsNull(aQuery) then
     Params.Add('query=' + VarToStr(aQuery));
   try
-    ContactList := TTMContactList.FromJSON(RetrieveData(Self.FBaseUrl + 'contacts', Params).Body);
+    ContactList := TTMContactList.FromJSON(RetrieveData(Self.FBaseUrl + 'contacts/search', Params).Body);
   finally
     Result := ContactList;
   end;
@@ -1512,7 +1624,7 @@ end;
 ///   Contact model
 /// </param>
 /// <param name="aListIds">
-///   List IDs this contact will be assigned to
+///   List IDs this contact will be assigned to; Required
 /// </param>
 /// <returns>
 ///   TTMLinkResult
@@ -1524,13 +1636,14 @@ var
 begin
   Params := TStringList.Create;
 
-  Params.Add('phone=' + aContact.Phone);
-  Params.Add('lists=' + VarToStr(aListIds));
   Params.Add('firstName=' + aContact.FirstName);
   Params.Add('lastName=' + aContact.LastName);
-  Params.Add('companyName=' + aContact.CompanyName);
+  Params.Add('phone=' + aContact.Phone);
   Params.Add('email=' + aContact.Email);
-  Params.Add('country=' + aContact.Country.id);
+  Params.Add('companyName=' + aContact.CompanyName);
+  {!! REMOVED Params.Add('country=' + aContact.Country.id); }
+  Params.Add('lists=' + VarToStr(aListIds));
+
   try
     LinkResult := TTMLinkResult.FromJSON(UpdateData(Self.FBaseUrl + 'contacts/' + IntToStr(aContact.Id), Params).Body);
   finally
@@ -1806,21 +1919,22 @@ end;
 ///   Custom field value
 /// </param>
 /// <returns>
-///   TTMContact
+///   TTMLinkResult
 /// </returns>
-function TTMClient.SetCustomFieldValue(aId, aContactId, aValue : Variant) : TTMContact;
+function TTMClient.SetCustomFieldValue(aId, aContactId, aValue : Variant) : TTMLinkResult;{!!TTMContact;}
 var
   Params : TStringList;
-  Contact : TTMContact;
+  {!!Contact : TTMContact;}
+  LinkResult : TTMLinkResult;
 begin
   Params := TStringList.Create;
 
   Params.Add('contactId=' + VarToStr(aContactId));
   Params.Add('value=' + VarToStr(aValue));
   try
-    Contact := TTMContact.FromJSON(UpdateData(Self.FBaseUrl + 'customfields/' + VarToStr(aId) + '/update', Params).Body);
+    LinkResult{!!Contact} := TTMLinkResult.FromJSON(UpdateData(Self.FBaseUrl + 'customfields/' + VarToStr(aId) + '/update', Params).Body);
   finally
-    Result := Contact;
+    Result := LinkResult{!!Contact};
   end;
   Params.Free;
 end;
@@ -1963,7 +2077,8 @@ begin
   if not VarIsNull(aContent) then
     Params.Add('content=' + VarToStr(aContent));
   try
-    TemplateList := TTMTemplateList.FromJSON(RetrieveData(Self.FBaseUrl + 'templates', Params).Body);
+    //!!TemplateList := TTMTemplateList.FromJSON(RetrieveData(Self.FBaseUrl + 'templates', Params).Body);
+    TemplateList := TTMTemplateList.FromJSON(RetrieveData(Self.FBaseUrl + 'templates/search', Params).Body);
   finally
     Result := TemplateList;
   end;
@@ -2158,7 +2273,8 @@ begin
   if not VarIsNull(aQuery) then
     Params.Add('query=' + VarToStr(aQuery));
   try
-    ListList := TTMListList.FromJSON(RetrieveData(Self.FBaseUrl + 'lists', Params).Body);
+    {!! ListList := TTMListList.FromJSON(RetrieveData(Self.FBaseUrl + 'lists', Params).Body);}
+    ListList := TTMListList.FromJSON(RetrieveData(Self.FBaseUrl + 'lists/search', Params).Body);
   finally
     Result := ListList;
   end;
@@ -2188,7 +2304,7 @@ begin
   Params := TStringList.Create;
 
   Params.Add('name=' + VarToStr(aName));
-  Params.Add('description=' + VarToStr(aDescription));
+  { !! REMOVED, AS INVALID  Params.Add('description=' + VarToStr(aDescription));}
   if aShared then
     Params.Add('shared=1')
   else
@@ -2232,7 +2348,7 @@ begin
   Params := TStringList.Create;
 
   Params.Add('name=' + aList.Name);
-  Params.Add('description=' + aList.Description);
+  { !! REMOVED, AS INVALID  Params.Add('description=' + aList.Description); }
   if aList.Shared then
     Params.Add('shared=1')
   else
@@ -2583,7 +2699,7 @@ begin
   if not VarIsNull(aQuery) then
     Params.Add('query=' + VarToStr(aQuery));
   try
-    MessageList := TTMMessageList.FromJSON(RetrieveData(Self.FBaseUrl + 'messages', Params).Body);
+    MessageList := TTMMessageList.FromJSON(RetrieveData(Self.FBaseUrl + 'messages/search', Params).Body);
   finally
     Result := MessageList;
   end;
@@ -2640,16 +2756,26 @@ begin
     Params.Add('text=' + VarToStr(aText));
   if not VarIsNull(aTemplateId) then
     Params.Add('templateId=' + VarToStr(aTemplateId));
+
   if not VarIsNull(aSendingTime) then
-    Params.Add('sendingTime=' + VarToStr(aSendingTime));
+  begin
+    { If parameter is a TDatetime, converts it to UNIX for ease of use }
+    if VarType(aSendingTime)=varDate then
+      Params.Add('sendingTime=' + IntToStr(DateTimeToUnix(aSendingTime)))
+    else
+      Params.Add('sendingTime=' + VarToStr(aSendingTime));
+  end;
+
   if not VarIsNull(aContactIds) then
     Params.Add('contacts=' + VarToStr(aContactIds));
   if not VarIsNull(aListIds) then
     Params.Add('lists=' + VarToStr(aListIds));
   if not VarIsNull(aPhones) then
     Params.Add('phones=' + VarToStr(aPhones));
+
   if not VarIsNull(aCutExtra) then
-    Params.Add('cutExtra=' + VarToStr(aCutExtra));
+    Params.Add('cutExtra=' + Bool_VarToStr(aCutExtra));{!!}
+
   if not VarIsNull(aPartsCount) then
     Params.Add('partsCount=' + VarToStr(aPartsCount));
   if not VarIsNull(aReferenceId) then
@@ -2736,7 +2862,7 @@ begin
     Params.Add('rrule=' + VarToStr(aRrule));
   Params.Add('dummy=1');
   try
-    MessagePrice := TTMMessagePriceResult.FromJSON(CreateData(Self.FBaseUrl + 'messages', Params).Body);
+    MessagePrice := TTMMessagePriceResult.FromJSON(RetrieveData(Self.FBaseUrl + 'messages/price', Params).Body);
   finally
     Result := MessagePrice;
   end;
@@ -3286,7 +3412,7 @@ begin
   if not VarIsNull(aQuery) then
     Params.Add('query=' + VarToStr(aQuery));
   try
-    ReplyList := TTMReplyList.FromJSON(RetrieveData(Self.FBaseUrl + 'replies', Params).Body);
+    ReplyList := TTMReplyList.FromJSON(RetrieveData(Self.FBaseUrl + 'replies/search', Params).Body);
   finally
     Result := ReplyList;
   end;
@@ -3917,6 +4043,66 @@ begin
   Result := GetStatements(aPage, null);
 end;
 
+
+/// <summary>
+///   Return account messaging statistics
+/// </summary>
+/// <param name="aBy">
+///   Indicates how to group results
+/// </param>
+/// <param name="aStart">
+///   Time period start in UNIX timestamp format
+/// </param>
+/// <param name="aEnd">
+///   Time period end in UNIX timestamp format
+/// </param>
+/// <returns>
+///   TTMSMessagingStatisticsList
+/// </returns>
+function TTMClient.GetMessagingStats(aBy: TTMMessagingStatsGrouping; aStart, aEnd : Variant) : TTMMessagingStatisticsList;
+var
+  Params : TStringList;
+  List : TTMMessagingStatisticsList;
+  S:String;
+begin
+  Params := TStringList.Create;
+  case aBy of
+    gr_day  : Params.Add('by=day');
+    gr_month: Params.Add('by=month');
+    gr_year : Params.Add('by=year');
+  end;
+
+  if not VarIsNull(aStart) then
+  begin
+    { If parameter is a TDatetime, converts it to UNIX for ease of use }
+    if VarType(aStart)=varDate then
+      Params.Add('start=' + IntToStr(DateTimeToUnix(aStart)))
+    else
+      Params.Add('start=' + VarToStr(aStart));
+  end;
+
+  if not VarIsNull(aEnd) then
+  begin
+    { If parameter is a TDatetime, converts it to UNIX for ease of use }
+    if VarType(aEnd)=varDate then
+      Params.Add('end=' + IntToStr(DateTimeToUnix(aEnd)))
+    else
+      Params.Add('end=' + VarToStr(aEnd));
+  end;
+
+  try
+    { A little hack to make the response a list of resources like most of similar functions do.
+      Makes it possible to simply json parse it into a class. }
+    S:=RetrieveData(Self.FBaseUrl + 'stats/messaging', Params).Body;
+    S:='{"resources": '+S+'}';
+    List:= TTMMessagingStatisticsList.FromJSON(S);
+  finally
+    Result := List;
+  end;
+  Params.Free;
+end;
+
+
 /// <summary>
 ///   Get current user info
 /// </summary>
@@ -3982,6 +4168,17 @@ end;
 function TTMClient.UpdateUser(aUser : TTMUser) : TTMLinkResult;
 begin
   Result := UpdateUser(aUser.FirstName, aUser.LastName, aUser.Company);
+end;
+
+function TTMClient.Ping: Boolean;
+var
+  ResponseCode : Integer;
+begin
+  try
+    ResponseCode := RetrieveData(Self.FBaseUrl + 'ping', nil).Code;
+  finally
+    Result := (ResponseCode = 200);
+  end;
 end;
 
 end.
