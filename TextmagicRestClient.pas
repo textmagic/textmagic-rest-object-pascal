@@ -1153,19 +1153,35 @@ end;
 function TTMClient.UrlEncode(aStr : String) : String;
 var
   I : Integer;
-const
-  UnsafeChars = ['*', '#', '%', '<', '>', ' ','[',']','@','+'];
+  Ch : WideChar;
 begin
   Result := '';
   for I := 1 to Length(aStr) do
   begin
-    if (aStr[I] in UnsafeChars) or (not (ord(aStr[I]) in [33..128])) then
+    Ch := aStr[I];
+    if (Ch >= 'A') and (Ch <= 'Z') then
+      Result := Result + Ch
+    else if (Ch >= 'a') and (Ch <= 'z') then
+      Result := Result + Ch
+    else if (Ch >= '0') and (Ch <= '9') then
+      Result := Result + Ch
+    else if (Ch = ' ') then
+      Result := Result + '+'
+    else if ((Ch = '-') or (Ch = '_') or (Ch = '.') or (Ch = '!') or (Ch = '*')
+      or (Ch = '~') or (Ch = '\')  or (Ch = '(') or (Ch = ')')) then
+      Result := Result + Ch
+    else if (Ord(Ch) <= $7F) then
+      Result := Result + '%' + IntToHex(Ord(Ch), 2)
+    else if (Ord(Ch) <= $7FF) then
     begin
-      Result := Result + '%' + IntToHex(Ord(aStr[I]), 2);
+      Result := Result + '%' + IntToHex($C0 or (Ord(Ch) shr 6), 2);
+      Result := Result + '%' + IntToHex($80 or (Ord(ch) and $3F), 2);
     end
     else
     begin
-      Result := Result + aStr[I];
+      Result := Result + '%' + IntToHex($E0 or (Ord(Ch) shr 12), 2);
+      Result := Result + '%' + IntToHex($80 or ((Ord(Ch) shr 6) and ($3F)), 2);
+      Result := Result + '%' + IntToHex($80 or ((Ord(Ch)) and ($3F)), 2);
     end;
   end;
 end;
