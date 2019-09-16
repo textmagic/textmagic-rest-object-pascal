@@ -2090,8 +2090,8 @@ var
 begin
   if Assigned(FFormats) then
   begin
-    for I := 0 to FFormats.Count - 1 do
-        FFormats[I]._Release;
+    for I := Pred(FFormats.Count) downto 0 do
+      FFormats.Delete(I);
     FFormats.Free;
   end;
 end;

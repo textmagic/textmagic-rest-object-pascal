@@ -1015,8 +1015,6 @@ end;
 /// </param>
 constructor TMException.CreateFromJSON(const aJSON : String);
 var
-  J : Integer;
-  FormChildren,
   ExceptionErrors,
   JSONException : ISuperObject;
   FormField,
@@ -1086,7 +1084,7 @@ begin
   try
     DoRequest(Id_HTTPMethodDelete, AURL, ASource, LStream, []);
     LStream.Position := 0;
-    Result := ReadStringAsCharset(LStream, ResponseCharset{$IFDEF STRING_IS_ANSI}, ADestEncoding{$ENDIF});
+    Result := ReadStringAsCharset(LStream, Response.Charset{$IFDEF STRING_IS_ANSI}, ADestEncoding{$ENDIF});
 
   finally
     FreeAndNil(LStream);

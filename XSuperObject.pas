@@ -2093,7 +2093,6 @@ end;
 
 class procedure TSerializeParse.ReadStream(AStream: TStream; IResult: IJSONAncestor);
 var
-  F: Boolean;
   ByteArray: TIdBytes;
 begin
   SetLength(ByteArray, AStream.Size);

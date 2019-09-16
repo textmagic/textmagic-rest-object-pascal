@@ -15,7 +15,7 @@ You'll need to make sure these 3 files are accessible by your project, either by
 
 On your project you will only need to use the unit *TextmagicRestClient.pas*.
 
-The wrapper uses Indy components to communicate with the REST API via SSL. In some cases, Indy will not be able to load the SSL libraries. If that happens, you can get them at [https://opendec.wordpress.com/tag/openssl/]. You'll just need to make sure the files **libeay32.dll** and **ssleay32.dll** (note: I'm using 32 bit versions) are accessible to your application.
+The wrapper uses Indy components to communicate with the REST API via SSL. In some cases, Indy will not be able to load the SSL libraries. If that happens, you can get them at [https://indy.fulgan.com/SSL/]. You'll just need to make sure the files **libeay32.dll** and **ssleay32.dll** (note: we use 32 bit versions for example application) are accessible to your application.
 
 That is all you need to start using the API.
 
