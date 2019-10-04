@@ -1,7 +1,9 @@
 [comment]: <> (HEAD)
 # TextMagic ObjectPascal API Wrapper
 Wrapper for the TextMagic REST API V2. It has been developed and tested in Delphi XE2 and XE7, but it should work in any modern version of Delphi.
+
 [comment]: <> (/HEAD)
+
 ## How to Install
 You can clone the repo in your location of choice by using :
 ```sh
@@ -70,6 +72,7 @@ MR:=TMC.CreateMessage('My SMS message',null,null,null,MY_LIST_ID,null,null,null,
 MR.free;
 ```
 [comment]: <> (FOOTER)
+
 ## Keywords
 
 delphi sms api
