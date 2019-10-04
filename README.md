@@ -69,7 +69,7 @@ var MR:TTMMessageResult;
 MR:=TMC.CreateMessage('My SMS message',null,null,null,MY_LIST_ID,null,null,null,null,null,null);
 MR.free;
 ```
-[comment]: <> (/FOOTER)
+[comment]: <> (FOOTER)
 ## Keywords
 
 delphi sms api
