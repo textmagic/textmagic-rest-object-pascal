@@ -1,6 +1,6 @@
 [comment]: <> (HEAD)
 # TextMagic ObjectPascal API Wrapper
-Wrapper for the TextMagic REST API V2. It has been developed and tested in Delphi XE2 and XE7, but it should work in any modern version of Delphi.
+Wrapper for the TextMagic REST API V2. It has been developed and tested for Delphi XE8+.
 
 [comment]: <> (/HEAD)
 

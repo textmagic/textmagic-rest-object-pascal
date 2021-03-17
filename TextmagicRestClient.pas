@@ -1104,6 +1104,8 @@ end;
 ///   Client user agent
 /// </param>
 constructor TTMClient.Create(aUsername : String; aToken : String; aUserAgent : String);
+var
+  SslHandler : TIdSSLIOHandlerSocketOpenSSL;
 begin
   inherited Create();
   Self.FUsername := aUsername;
@@ -1111,7 +1113,10 @@ begin
   Self.FBaseUrl := API_URI;
   Self.FUserAgent := aUserAgent;
   Self.FHeaders := TStringList.Create;
-  Self.FSslHandler := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
+  SslHandler := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
+  SslHandler.SSLOptions.Method := sslvTLSv1_2;
+  SslHandler.SSLOptions.SSLVersions := [sslvTLSv1_2];
+  Self.FSslHandler := SslHandler;
   Self.LastExecuted := Now;
 end;
 
